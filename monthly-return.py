@@ -33,6 +33,7 @@ monthly_returns.name = 'Return'
 #calculate the average monthly return of all positive returns
 positive_returns = monthly_returns[monthly_returns > 0]
 average_positive_return = positive_returns.mean()
+median_positive_return = positive_returns.median()
 max_positive_return = positive_returns.max()
 
 # calculate the return distribution of the monthly returns
@@ -60,8 +61,7 @@ bins = pd.IntervalIndex.from_tuples([
     (0.07, 0.08),
     (0.08, 0.09),
     (0.09, 0.1), 
-    (0.1, 0.2), 
-    (0.2, float('inf'))])  
+    (0.1, float('inf'))])  
 return_distribution_bycount = monthly_returns.groupby(pd.cut(monthly_returns, bins)).count()
 
 return_distribution = pd.cut(monthly_returns, bins).value_counts(normalize=True).sort_index() * 100
@@ -72,6 +72,7 @@ print(f"Symbol: {symbol}")
 print(f"From:{start_date.date()} To:{end_date.date()}")
 # print the average positive return as percentage
 print(f"Average positive monthly return: {average_positive_return:.2%}")
+print(f"Median positive monthly return: {median_positive_return:.2%}")
 print(f"Max positive monthly return: {max_positive_return:.2%}")
 
 
@@ -82,3 +83,11 @@ if args.plot:
     # plot the monthly returns
     monthly_returns.plot(kind='hist', bins=30, title=f'{symbol} Monthly Return Distribution', color='skyblue', edgecolor='black')
     plt.show()
+    
+
+    
+    # return_distribution.plot(kind='bar', color = 'skyblue', edgecolor='black')
+    # plt.title(f'{symbol} Monthly Return Distribution')
+    # plt.ylabel('Percentage')
+    # plt.xticks(ticks=range(len(return_distribution)), labels=[f'{(i.left*100.0):.0f}%' for i in return_distribution.index])
+    # plt.show()
